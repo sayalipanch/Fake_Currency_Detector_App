@@ -1,6 +1,8 @@
 import 'package:fake_currency_detector/utils/app_theme.dart';
 import 'package:flutter/material.dart';
 
+import '../scan/scan.dart';
+
 class Home extends StatefulWidget {
   const Home({super.key});
 
@@ -86,7 +88,7 @@ class _HomeState extends State<Home> {
                 ],
               ),
               ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (_){return Scan();}));},
                   style: AppTheme.buttonStyle(backColor: AppTheme.mildGreen),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
