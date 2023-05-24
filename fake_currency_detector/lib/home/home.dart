@@ -35,7 +35,7 @@ class _HomeState extends State<Home> {
                   style: AppTheme.appText(
                       size: width / 30,
                       isShadow: true,
-                      weight: FontWeight.w900,
+                      weight: FontWeight.w500,
                       color: Colors.red),
                 ),
               ),
@@ -61,6 +61,7 @@ class _HomeState extends State<Home> {
                       child: Icon(
                         Icons.currency_rupee_sharp,
                         size: width / 6,
+                        color: AppTheme.mildGreen,
                       ),
                     ),
                   ),
@@ -88,7 +89,11 @@ class _HomeState extends State<Home> {
                 ],
               ),
               ElevatedButton(
-                  onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (_){return Scan();}));},
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (_) {
+                      return const Scan();
+                    }));
+                  },
                   style: AppTheme.buttonStyle(backColor: AppTheme.mildGreen),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(

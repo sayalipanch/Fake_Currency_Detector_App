@@ -1,9 +1,17 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.fake_currency_detector">
+
+   <uses-permission android:name="android.permission.CAMERA"/>
+   <uses-feature android:name="android.hardware.camera"/>
+   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
    <application
         android:label="fake_currency_detector"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        <activity
+    android:name="com.yalantis.ucrop.UCropActivity"
+    android:screenOrientation="portrait"
+    android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"
