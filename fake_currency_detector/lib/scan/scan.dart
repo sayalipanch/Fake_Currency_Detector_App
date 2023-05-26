@@ -1,6 +1,7 @@
-// ignore_for_file: unused_local_variable, unused_field
+// ignore_for_file: unused_local_variable, unused_field, use_build_context_synchronously
 import 'dart:io';
 import 'package:edge_detection/edge_detection.dart';
+import 'package:fake_currency_detector/inference/infer.dart';
 import 'package:fake_currency_detector/utils/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -17,10 +18,11 @@ class Scan extends StatefulWidget {
 
 class _ScanState extends State<Scan> {
   String? _imagePath;
+  bool success = false;
 
-  void detectObject({bool isCamera = true}) async {
+  Future<dynamic> detectObject({bool isCamera = true}) async {
     bool isCameraGranted = await Permission.camera.request().isGranted;
-    bool success = false;
+
     if (!isCameraGranted) {
       isCameraGranted =
           await Permission.camera.request() == PermissionStatus.granted;
@@ -28,15 +30,14 @@ class _ScanState extends State<Scan> {
     if (!isCameraGranted) {
       return;
     }
-    _imagePath = join((await getApplicationSupportDirectory()).path,
-        "${(DateTime.now().millisecondsSinceEpoch / 1000).round()}.jpeg");
 
     if (isCamera) {
+      _imagePath = join((await getApplicationSupportDirectory()).path,
+          "${(DateTime.now().millisecondsSinceEpoch / 1000).round()}.jpeg");
       success = await EdgeDetection.detectEdge(
         _imagePath!,
         canUseGallery: false,
-        androidScanTitle:
-            'Scan Currency', // use custom localizations for android
+        androidScanTitle: 'Detect Edge & Scan',
         androidCropTitle: 'Crop Currency',
         androidCropBlackWhiteTitle: 'Black White',
         androidCropReset: 'Reset',
@@ -76,6 +77,10 @@ class _ScanState extends State<Scan> {
                               .pickImage(source: ImageSource.camera);
                           if (imageFile != null) {
                             File file = File(imageFile.path);
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (_) {
+                              return Infer(imagePath: file.path);
+                            }));
                           }
                         },
                         style: AppTheme.buttonStyle(
@@ -103,6 +108,10 @@ class _ScanState extends State<Scan> {
                               .pickImage(source: ImageSource.gallery);
                           if (imageFile != null) {
                             File file = File(imageFile.path);
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (_) {
+                              return Infer(imagePath: file.path);
+                            }));
                           }
                         },
                         style: AppTheme.buttonStyle(
@@ -126,7 +135,15 @@ class _ScanState extends State<Scan> {
                     width: width / 1.5,
                     child: ElevatedButton(
                         onPressed: () async {
-                          detectObject();
+                          detectObject().then((value) {
+                            if (success) {
+                              success = false;
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (_) {
+                                return Infer(imagePath: _imagePath!);
+                              }));
+                            }
+                          });
                         },
                         style: AppTheme.buttonStyle(
                             backColor: AppTheme.whiteColor),
